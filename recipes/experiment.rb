@@ -12,18 +12,25 @@ script 'run_experiment' do
   EOM
 end
 
-directory '/tmp/streaming-benchmarks' do
-  owner node['streamingExperiment']['user']
+script 'get_source' do
+  cwd "/tmp"
+  user node['streamingExperiment']['user']
   group node['streamingExperiment']['group']
-  mode '0755'
-  action :create
+  interpreter "bash"
+  code <<-EOM
+     wget https://s3-us-west-2.amazonaws.com/yahoo-stream-compiled/streaming-benchmarks.tgz
+  EOM
 end
 
- git "/tmp/streaming-benchmarks" do
-    repository "git://github.com/ashansa/streaming-benchmarks.git"
-    reference "master"
-    action :sync
-  end
+script 'unpack_source' do
+  cwd "/tmp"
+  user node['streamingExperiment']['user']
+  group node['streamingExperiment']['group']
+  interpreter "bash"
+  code <<-EOM
+     tar -xvzf streaming-benchmarks.tgz
+  EOM
+end
 
 file "/tmp/streaming-benchmarks/stream-bench.sh" do
   owner node[:streamingExperiment][:user]
@@ -32,7 +39,7 @@ end
 
 template "/tmp/streaming-benchmarks/stream-bench.sh" do
     source "stream-bench.sh.erb"
-    owner node[:streamingExperiment][:user]
+    user node[:streamingExperiment][:user]
     group node[:streamingExperiment][:group]
     mode 0775
 end
