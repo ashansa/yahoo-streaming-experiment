@@ -24,7 +24,6 @@ suites:
       - recipe[streamingExperiment::install]
       - recipe[streamingExperiment::experiment]
       - recipe[streamingExperiment::setup]
-      - recipe[streamingExperiment::testFlink]
       - recipe[streamingExperiment::testSpark]
 
     attributes:
@@ -33,9 +32,6 @@ suites:
                 private_ips: ["10.0.2.15"]
                 public_ips: ["10.0.2.15"]
             setup:
-              private_ips: ["10.0.2.15"]
-              public_ips: ["10.0.2.15"]
-            testFlink:
               private_ips: ["10.0.2.15"]
               public_ips: ["10.0.2.15"]
             testSpark:
